@@ -3,7 +3,6 @@ package Windows;
 import Player.*;
 
 import javax.swing.*;
-import java.awt.*;
 
 
 public class GameScreen extends JFrame{
@@ -21,7 +20,6 @@ public class GameScreen extends JFrame{
             gamePanel = new GamePanel(400,800);
             gameLoop = new GameLoop(gamePanel, gamePanel.getPlayer());
             gameThread = new Thread(gameLoop);
-
         }
 
         public void init () {
