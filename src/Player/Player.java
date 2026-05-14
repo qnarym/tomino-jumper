@@ -1,5 +1,7 @@
 package Player;
 
+import Map.Levels;
+
 import java.awt.event.KeyListener;
 
 public class Player {
@@ -7,6 +9,11 @@ public class Player {
     private int x;
     private int y;
 
+    private int currLevel = 0;
+    private Levels level = new Levels(currLevel);
+
+    private boolean isFalling;
+    private int fallingSpeed;
 
     private boolean isWalkingR;
     private boolean isWalkingL;
@@ -17,6 +24,37 @@ public class Player {
     private int jumpForceR;
     private int jumpForceL;
 
+    public int getCurrLevel() {
+        return currLevel;
+    }
+
+    public void setCurrLevel(int currLevel) {
+        this.currLevel = currLevel;
+    }
+
+    public Levels getLevel() {
+        return level;
+    }
+
+    public void setLevel(Levels level) {
+        this.level = level;
+    }
+
+    public boolean isFalling() {
+        return isFalling;
+    }
+
+    public void setFalling(boolean falling) {
+        isFalling = falling;
+    }
+
+    public int getFallingSpeed() {
+        return fallingSpeed;
+    }
+
+    public void setFallingSpeed(int fallingSpeed) {
+        this.fallingSpeed = fallingSpeed;
+    }
 
     public int getJumpForce() {
         return jumpForce;

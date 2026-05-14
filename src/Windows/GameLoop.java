@@ -2,19 +2,30 @@ package Windows;
 
 import Player.Player;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class GameLoop implements Runnable{
 
     private GamePanel panel;
     private final Player player;
-
     private final int FPS = 120;
+    private BufferedImage image;
+
 
     public GameLoop(GamePanel panel, Player player){
         this.panel = panel;
         this.player = player;
+
+        try {
+            FileInputStream fis = new FileInputStream(player.getLevel().getLevel(player.getCurrLevel()));
+            image = ImageIO.read(fis);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -28,27 +39,61 @@ public class GameLoop implements Runnable{
 
         while(true){
 
-            //movement logic
+
+            if (panel.isLevelChanged()) {
+                try {
+                    FileInputStream fis = new FileInputStream(player.getLevel().getLevel(player.getCurrLevel()));
+                    image = ImageIO.read(fis);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+
             try {
                 Thread.sleep(8);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
+             if (image.getRGB(player.getX(), player.getY()+52) == new Color(69,50,40).getRGB() || image.getRGB(player.getX(), player.getY()+52) == new Color(26,13,6).getRGB()){
+                player.setFalling(false);
+                player.setFallingSpeed(0);
+            }
+            else if (!player.isJumping() && player.getJumpForce()==0 && player.getJumpForceR()==0 && player.getJumpForceL()==0 && image.getRGB(player.getX(), player.getY() + 50) != new Color(69,50,40).getRGB()){
+                player.setFalling(true);
+                if (player.getFallingSpeed()<6){
+                    player.setFallingSpeed(player.getFallingSpeed()+1);
+                }
+            }
+
+            if(player.getY()<0){
+                player.setCurrLevel(player.getCurrLevel()+1);
+                System.out.println("level changed");
+                player.setY(990);
+                panel.setLevelChanged(true);
+            }
+            else if(player.getY()>990&&player.getCurrLevel()!=0){
+                player.setCurrLevel(player.getCurrLevel()-1);
+                System.out.println("level changed");
+                player.setY(0);
+                panel.setLevelChanged(true);
+            }
+
             if(!player.isJumping()&&player.getJumpForce()>0) {
-                player.setJumpForce(player.getJumpForce() - 10);
-                player.setY(player.getY() - 20);
+                player.setJumpForce(player.getJumpForce() - 5);
+                player.setY(player.getY() - 15 );
                 System.out.println("Y"+player.getY());
             }
             else if (!player.isJumping()&&player.getJumpForceL()>0) {
-                player.setJumpForceL(player.getJumpForceL() - 10);
-                player.setY(player.getY() - 20);
-                player.setX(player.getX() - 10);
+                player.setJumpForceL(player.getJumpForceL() - 5);
+                player.setY(player.getY() - 10);
+                player.setX(player.getX() - 14);
             }
             else if (!player.isJumping()&&player.getJumpForceR()>0) {
-                player.setJumpForceR(player.getJumpForceR() - 10);
-                player.setY(player.getY() - 20);
-                player.setX(player.getX() + 10);
+                player.setJumpForceR(player.getJumpForceR() - 5);
+                player.setY(player.getY() - 10);
+                player.setX(player.getX() + 14);
             }
 
             else if (panel.getPlayer().isWalkingR()&&!panel.getPlayer().isJumping()) {
@@ -61,9 +106,9 @@ public class GameLoop implements Runnable{
             }
 
 
-            else if (player.isJumping() && player.isWalkingL()) {
+            else if (player.isJumping() && player.isWalkingL() && player.getJumpForceR()==0 && player.getJumpForce()==0 && !player.isFalling()  ) {
                 try {
-                    Thread.sleep(64);
+                    Thread.sleep(32);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -72,9 +117,9 @@ public class GameLoop implements Runnable{
                     System.out.println("left jumping");
                 }
             }
-            else if (player.isJumping()&&player.isWalkingR()){
+            else if (player.isJumping()&&player.isWalkingR() && player.getJumpForceL()==0 && player.getJumpForce()==0 && !player.isFalling()){
                 try {
-                    Thread.sleep(64);
+                    Thread.sleep(32);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -83,15 +128,19 @@ public class GameLoop implements Runnable{
                     System.out.println("right jumping");
                 }
             }
-            else if (player.isJumping()) {
+            else if (player.isJumping() && player.getJumpForceR()==0 && player.getJumpForceL()==0 && !player.isFalling()  ) {
                 try {
-                    Thread.sleep(64);
+                    Thread.sleep(32);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 if(player.isJumping()&&player.getJumpForce()<100){
                     player.setJumpForce(player.getJumpForce()+10);
                 }
+            }
+
+            if (player.isFalling()){
+                player.setY(player.getY()+ player.getFallingSpeed());
             }
 
 
