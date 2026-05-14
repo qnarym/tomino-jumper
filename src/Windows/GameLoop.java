@@ -35,95 +35,64 @@ public class GameLoop implements Runnable{
                 throw new RuntimeException(e);
             }
 
-            if(!player.isJumping()&&player.getJumpForce()>0&&player.getJumpForceR()>0) {
-                player.setJumpForceL(0);
-                player.setJumpForce(player.getJumpForce() - 5);
-                player.setJumpForceR(player.getJumpForceR() - 5);
-
-                player.setY(player.getY() - 7);
-                player.setX(player.getX() + 7);
-                System.out.println("Y"+player.getY());
-                System.out.println("RF"+player.getJumpForceR());
-            }
-            if(!player.isJumping()&&player.getJumpForce()>0&&player.getJumpForceL()>0) {
-                player.setJumpForceR(0);
-                player.setJumpForce(player.getJumpForce() - 5);
-                player.setJumpForceL(player.getJumpForceL() - 5);
-
-                player.setY(player.getY() - 7);
-                player.setX(player.getX() - 7);
-                System.out.println("Y"+player.getY());
-                System.out.println("LF"+player.getJumpForceL());
-            }
             if(!player.isJumping()&&player.getJumpForce()>0) {
-                player.setJumpForce(player.getJumpForce() - 5);
-                player.setY(player.getY() - 10);
+                player.setJumpForce(player.getJumpForce() - 10);
+                player.setY(player.getY() - 20);
                 System.out.println("Y"+player.getY());
+            }
+            else if (!player.isJumping()&&player.getJumpForceL()>0) {
+                player.setJumpForceL(player.getJumpForceL() - 10);
+                player.setY(player.getY() - 20);
+                player.setX(player.getX() - 10);
+            }
+            else if (!player.isJumping()&&player.getJumpForceR()>0) {
+                player.setJumpForceR(player.getJumpForceR() - 10);
+                player.setY(player.getY() - 20);
+                player.setX(player.getX() + 10);
             }
 
             else if (panel.getPlayer().isWalkingR()&&!panel.getPlayer().isJumping()) {
                 System.out.println("right");
                 player.setX(player.getX()+5);
-            }else if (player.isWalkingL()&&!panel.getPlayer().isJumping()) {
+            }
+            else if (player.isWalkingL()&&!panel.getPlayer().isJumping()) {
                 player.setX(player.getX()-5);
                 System.out.println("left");
-
-
             }
 
-            else if (panel.getPlayer().isJumping()&&panel.getPlayer().isWalkingL()&&!panel.getPlayer().isWalkingR()) {
+
+            else if (player.isJumping() && player.isWalkingL()) {
                 try {
-                    Thread.sleep(128);
+                    Thread.sleep(64);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-                if(player.isJumping()&&player.getJumpForce()<100&&player.getJumpForceL()<100) {
-
-
-
-                    player.setJumpForce(player.getJumpForce()+10);
+                if(player.isJumping()&&player.getJumpForceL()<100){
                     player.setJumpForceL(player.getJumpForceL()+10);
-                    System.out.println("LF"+player.getJumpForceL());
-
+                    System.out.println("left jumping");
                 }
-            }else if (panel.getPlayer().isJumping()&&panel.getPlayer().isWalkingR()&&!panel.getPlayer().isWalkingL()) {
+            }
+            else if (player.isJumping()&&player.isWalkingR()){
                 try {
-                    Thread.sleep(128);
+                    Thread.sleep(64);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-                if(player.isJumping()&&player.getJumpForce()<100&&player.getJumpForceR()<100){
-
-
-
-                    player.setJumpForce(player.getJumpForce()+10);
+                if(player.isJumping()&&player.getJumpForceR()<100){
                     player.setJumpForceR(player.getJumpForceR()+10);
-                    System.out.println("RF"+player.getJumpForceR());
-
+                    System.out.println("right jumping");
                 }
             }
-
-
             else if (player.isJumping()) {
-
                 try {
-                    Thread.sleep(128);
+                    Thread.sleep(64);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
                 if(player.isJumping()&&player.getJumpForce()<100){
-
-
-
                     player.setJumpForce(player.getJumpForce()+10);
-                    System.out.println("JF"+player.getJumpForce());
-
                 }
             }
-
 
 
             if (System.nanoTime() - lastTime >= timePerTick){
