@@ -17,7 +17,7 @@ public class GameScreen extends JFrame{
     public GameScreen() {
             super("tomino jumper: jumping");
 
-            gamePanel = new GamePanel(700,940);
+            gamePanel = new GamePanel(700,900);
             gameLoop = new GameLoop(gamePanel, gamePanel.getPlayer());
             gameThread = new Thread(gameLoop);
         }
@@ -25,7 +25,7 @@ public class GameScreen extends JFrame{
         public void init () {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setResizable(false);
-            setSize(1416,1093);
+            setSize(1400,1080);
             gameThread.start();
 
             add(gamePanel);

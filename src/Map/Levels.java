@@ -13,8 +13,9 @@ public class Levels {
 
     private int currLevel;
     private final String[] levelMap = {"res/levels/level11.png","res/levels/level12.png"};
+    private final String[] collisionMap = {"res/levels/collisionMaps/clevel11.png","res/levels/collisionMaps/clevel12.png"};
 
-    private final int[] collisionColors = {new Color(26,13,6).getRGB(), new Color(69,50,40).getRGB()};
+    private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
     private BufferedImage image;
 
 
@@ -24,7 +25,7 @@ public class Levels {
         this.currLevel = currLevel;
 
         try {
-            fis = new FileInputStream(levelMap[currLevel]);
+            fis = new FileInputStream(collisionMap[currLevel]);
             image = ImageIO.read(fis);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -39,7 +40,7 @@ public class Levels {
 
         if (levelChanged) {
             try {
-                fis = new FileInputStream(levelMap[playerLevel]);
+                fis = new FileInputStream(collisionMap[playerLevel]);
                 image = ImageIO.read(fis);
                 System.out.println(" collision map changed");
             } catch (IOException e) {
@@ -61,6 +62,34 @@ public class Levels {
         return collision;
     }
 
+    public boolean checkHeadCollision(boolean levelChanged, int playerLevel, int x, int y) {
+        boolean collision = false;
+        x = x+15;
+
+        if (levelChanged) {
+            try {
+                fis = new FileInputStream(collisionMap[playerLevel]);
+                image = ImageIO.read(fis);
+                System.out.println(" collision map changed");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        for (int i = 0; i <collisionColors.length; i++){
+            try {
+                if (image.getRGB(x, y) == collisionColors[i] && y>20){
+                    collision = true;
+                    System.out.println("head collision");
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds "+e.getMessage());
+            }
+
+        }
+        return collision;
+    }
+
     public boolean[] checkWallCollision(boolean levelChanged, int playerLevel, int x, int y) {
         int x1 = x-1;
         int x2 = x+31;
@@ -71,7 +100,7 @@ public class Levels {
 
         if (levelChanged) {
             try {
-                fis = new FileInputStream(levelMap[playerLevel]);
+                fis = new FileInputStream(collisionMap[playerLevel]);
                 image = ImageIO.read(fis);
             } catch (IOException e) {
                 throw new RuntimeException(e);

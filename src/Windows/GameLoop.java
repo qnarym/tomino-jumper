@@ -15,7 +15,7 @@ public class GameLoop implements Runnable{
 
     private GamePanel panel;
     private final Player player;
-    private final int FPS = 120;
+    private final int FPS = 90;
     private BufferedImage image;
 
 
@@ -65,17 +65,19 @@ public class GameLoop implements Runnable{
             /**
              * Level background changing logic
              */
-            if(player.getY()<0){
+            if(player.getY()<5){
                 player.setCurrLevel(player.getCurrLevel()+1);
                 System.out.println("level changed");
                 player.setY(990);
                 panel.setLevelChanged(true);
+                panel.repaint();
             }
             else if(player.getY()>990&&player.getCurrLevel()!=0){
                 player.setCurrLevel(player.getCurrLevel()-1);
                 System.out.println("level changed");
                 player.setY(0);
                 panel.setLevelChanged(true);
+                panel.repaint();
             }
 
             /**
@@ -83,14 +85,19 @@ public class GameLoop implements Runnable{
              */
             if(!player.isJumping()&&player.getJumpForce()>0) {
                 player.setJumpForce(player.getJumpForce() - 5);
-                player.setY(player.getY() - 15 );
+                if(!player.getLevel().checkHeadCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())) {
+                    player.setY(player.getY() - 15 );
+                }
                 System.out.println("Y"+player.getY());
             }
             else if (!player.isJumping()&&player.getJumpForceL()>0) {
                 player.setJumpForceL(player.getJumpForceL() - 5);
-                player.setY(player.getY() - 12);
+                if(!player.getLevel().checkHeadCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())) {
+                    player.setY(player.getY() - 15 );
+                }
                 if (!player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[0]){
                     player.setX(player.getX() - 10);
+                    player.setVelocity(-30);
                 }
                 else{
                     player.setJumpForceR(20);
@@ -100,9 +107,12 @@ public class GameLoop implements Runnable{
             }
             else if (!player.isJumping()&&player.getJumpForceR()>0) {
                 player.setJumpForceR(player.getJumpForceR() - 5);
-                player.setY(player.getY() - 12);
+                if(!player.getLevel().checkHeadCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())) {
+                    player.setY(player.getY() - 15 );
+                }
                 if (!player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]){
                     player.setX(player.getX() + 10);
+                    player.setVelocity(30);
                 }
                 else{
                     player.setJumpForceL(20);
@@ -114,17 +124,36 @@ public class GameLoop implements Runnable{
             /**
              * Player basic movement
              */
+
+
+
             else if (panel.getPlayer().isWalkingR() && !panel.getPlayer().isJumping() && !player.isFalling()) {
-                if (!player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]){
-                    player.setX(player.getX() + 5);
-                    System.out.println("right");
+                if (player.getVelocity()!=5){
+                    player.setVelocity(30);
                 }
             }
             else if (player.isWalkingL()&&!panel.getPlayer().isJumping() && !player.isFalling()) {
-                if (!player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[0]){
-                    player.setX(player.getX() - 5);
-                    System.out.println("left");
+                if (player.getVelocity()!=-5){
+                    player.setVelocity(-30);
                 }
+            }
+
+            if (player.getVelocity()!=0 && !panel.getPlayer().isJumping()){
+                if (player.getVelocity()<0 && !player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[0] && !player.isFalling()){
+                    player.setX(player.getX() + player.getVelocity()/15);
+                }
+                else if (player.getVelocity()>0 && !player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1] && !player.isFalling()) {
+                    player.setX(player.getX() + player.getVelocity()/15);
+                }
+
+                if (!player.isWalkingR() && player.getVelocity()>0 && !player.isJumping()){
+                    player.setVelocity(player.getVelocity() -1);
+                }
+                else if (!player.isWalkingL() && player.getVelocity()<0 && player.getJumpForce()==0 && player.getJumpForceL()==0 && player.getJumpForceR()==0){
+                    player.setVelocity(player.getVelocity() +1);
+                }
+
+
             }
 
             /**
@@ -168,6 +197,14 @@ public class GameLoop implements Runnable{
              */
             if (player.isFalling()){
                 player.setY(player.getY()+ player.getFallingSpeed());
+                player.setX(player.getX() + player.getVelocity()/5);
+                if (player.getVelocity()>0){
+                    player.setVelocity(player.getVelocity()-1);
+                }
+                else if (player.getVelocity()<0){
+                    player.setVelocity(player.getVelocity()+1);
+                }
+
             }
 
 

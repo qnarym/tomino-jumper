@@ -16,12 +16,21 @@ public class Player {
 
     private boolean isWalkingR;
     private boolean isWalkingL;
+    private int velocity = 0;
 
     private boolean isJumping;
     private int jumpForce;
 
     private int jumpForceR;
     private int jumpForceL;
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
 
     public int getCurrLevel() {
         return currLevel;
