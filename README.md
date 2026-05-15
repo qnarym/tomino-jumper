@@ -22,3 +22,6 @@ Nechť narazíte na memísky :omegalul:
 
 obchod  existuje ale až během hry zjístíš jakym zpusobem visco
 
+![Ukázka hry](res/tsBackground.png)
+
+

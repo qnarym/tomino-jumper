@@ -2,7 +2,6 @@ package Player;
 
 import Map.Levels;
 
-import java.awt.event.KeyListener;
 
 public class Player {
 
