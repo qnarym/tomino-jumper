@@ -13,6 +13,8 @@ public class TitleScreen extends JFrame {
           super("tomino jumper: Main menu");
     }
 
+    private int fps = 90;
+
 
     public void init() {
         setSize(800, 600);
@@ -35,9 +37,14 @@ public class TitleScreen extends JFrame {
 
         startGame.addActionListener(e -> {
             dispose();
-            new GameScreen().init();
-
+            System.out.println(fps);
+            new GameScreen(fps).init();
         });
+
+        settingsButton.addActionListener(e -> {
+            new SettingsScreen(this).init();
+        });
+
         exitButton.addActionListener(e -> {
             System.exit(0);
         });
@@ -45,5 +52,14 @@ public class TitleScreen extends JFrame {
 
 
         setVisible(true);
+    }
+
+
+    public int getFps() {
+        return fps;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
     }
 }

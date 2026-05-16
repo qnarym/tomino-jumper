@@ -17,6 +17,7 @@ public class GamePanel extends JPanel {
     private int y;
     private Player player;
     private BufferedImage image;
+    private BufferedImage character;
 
     private boolean levelChanged;
 
@@ -45,6 +46,13 @@ public class GamePanel extends JPanel {
             throw new RuntimeException(e);
         }
 
+        try {
+            FileInputStream characterF = new FileInputStream("res/character/standingR.png");
+            character = ImageIO.read(characterF);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         addKeyListener(new Movement(player));
         setFocusable(true);
         setSize(1400,1080);
@@ -64,9 +72,17 @@ public class GamePanel extends JPanel {
             levelChanged = false;
         }
 
+
+        try {
+            FileInputStream characterF = new FileInputStream(player.getPlayerAnimation(player.getStatus()));
+            character = ImageIO.read(characterF);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         g.drawImage(image,0,0,null);
         g.setColor(Color.pink);
-        g.fillRect(player.getX(), player.getY(), 30, 50);
+        g.drawImage(character, player.getX(), player.getY(), 40,50  , null);
     }
 
 }

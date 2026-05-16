@@ -33,9 +33,11 @@ public class Levels {
 
     }
 
-    public boolean checkPlatformCollision(boolean levelChanged, int playerLevel, int x, int y) {
-        boolean collision = false;
-        x = x+15;
+    public boolean[] checkPlatformCollision(boolean levelChanged, int playerLevel, int x, int y) {
+        boolean collisionL = false;
+        boolean collisionR = false;
+        boolean collisionC = false;
+
         y = y+52;
 
         if (levelChanged) {
@@ -50,21 +52,45 @@ public class Levels {
 
 
         for (int i = 0; i <collisionColors.length; i++){
+            x = x+15;
             try {
                 if (image.getRGB(x, y) == collisionColors[i]){
-                    collision = true;
+                    collisionC = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
                 System.err.println("player is out of bounds "+e.getMessage());
             }
 
         }
-        return collision;
+        for (int i = 0; i <collisionColors.length; i++){
+            x = x+5;
+            try {
+                if (image.getRGB(x, y) == collisionColors[i]){
+                    collisionL = true;
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds "+e.getMessage());
+            }
+
+        }
+        for (int i = 0; i <collisionColors.length; i++){
+            x = x+25;   
+            try {
+                if (image.getRGB(x, y) == collisionColors[i]){
+                    collisionR = true;
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds "+e.getMessage());
+            }
+
+        }
+        return new boolean[]{collisionL,collisionC,collisionR};
     }
 
     public boolean checkHeadCollision(boolean levelChanged, int playerLevel, int x, int y) {
         boolean collision = false;
         x = x+15;
+        y = y-5;
 
         if (levelChanged) {
             try {
@@ -93,7 +119,7 @@ public class Levels {
     public boolean[] checkWallCollision(boolean levelChanged, int playerLevel, int x, int y) {
         int x1 = x-1;
         int x2 = x+31;
-        y = y+25;
+        y = y+10;
 
         boolean collisionR = false;
         boolean collisionL = false;
@@ -108,15 +134,17 @@ public class Levels {
         }
         for (int i = 0; i <collisionColors.length; i++){
             try{
-                if (image.getRGB(x1, y) == collisionColors[i]){
-                    collisionL = true;
-                    System.out.println("wall collision found left");
+                for (int j = 0; j < 35 ; j++) {
+                    if (image.getRGB(x1, y+j) == collisionColors[i]){
+                        collisionL = true;
+                        System.out.println("wall collision found left");
+                    }
+                    else if (image.getRGB(x2, y+j) == collisionColors[i]){
+                        collisionR = true;
+                        System.out.println("wall collision found right");
+                    }
+                }
 
-                }
-                else if (image.getRGB(x2, y) == collisionColors[i]){
-                    collisionR = true;
-                    System.out.println("wall collision found right");
-                }
             }catch (ArrayIndexOutOfBoundsException e){
                 System.err.println("player is out of bounds " + e.getMessage());
             }

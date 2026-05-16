@@ -8,6 +8,10 @@ public class Player {
     private int x;
     private int y;
 
+    private final String[] playerAnimation =  {"res/character/standingR.png","res/character/standingL.png","res/character/walkingR.png","res/character/walkingL.png","res/character/jumpChargingR.png","res/character/jumpChargingL.png","res/character/fallingR.png","res/character/fallingL.png"};
+    private int status = 0;
+    private String dir = "";
+
     private int currLevel = 0;
     private Levels level = new Levels(currLevel);
 
@@ -23,6 +27,26 @@ public class Player {
 
     private int jumpForceR;
     private int jumpForceL;
+
+    public String getPlayerAnimation(int status) {
+        return playerAnimation[status];
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
 
     public int getVelocity() {
         return velocity;
