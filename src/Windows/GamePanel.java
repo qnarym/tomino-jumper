@@ -58,13 +58,15 @@ public class GamePanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        try{
-            image =  new ImageIcon(this.getClass().getClassLoader().getResource(player.getLevel().getLevel(player.getCurrLevel())));
-            image.setImage(image.getImage().getScaledInstance(dimension.width,dimension.height,Image.SCALE_SMOOTH));
-        }catch (NullPointerException e){
-            System.out.println("missing file");
+        if(levelChanged){
+            try{
+                image =  new ImageIcon(this.getClass().getClassLoader().getResource(player.getLevel().getLevel(player.getCurrLevel())));
+                image.setImage(image.getImage().getScaledInstance(dimension.width,dimension.height,Image.SCALE_SMOOTH));
+            }catch (NullPointerException e){
+                System.out.println("missing file");
+            }
+            levelChanged = false;
         }
-
 
         try {
             InputStream characterF = this.getClass().getClassLoader().getResourceAsStream(player.getPlayerAnimation(player.getStatus()));

@@ -51,7 +51,7 @@ public class SettingsScreen extends JDialog {
 
 
             add(panel, BorderLayout.CENTER);
-         setSize(600, 500);
+         setSize(600, 150);
          setVisible(true);
      }
 
