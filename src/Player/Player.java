@@ -2,31 +2,45 @@ package Player;
 
 import Map.Levels;
 
+import java.awt.*;
+
 
 public class Player {
 
     private int x;
     private int y;
 
-    private final String[] playerAnimation =  {"res/character/standingR.png","res/character/standingL.png","res/character/walkingR.png","res/character/walkingL.png","res/character/jumpChargingR.png","res/character/jumpChargingL.png","res/character/fallingR.png","res/character/fallingL.png"};
+    private final String[] playerAnimation =  {"character/standingR.png","character/standingL.png","character/walkingR.png","character/walkingL.png","character/jumpChargingR.png","character/jumpChargingL.png","character/fallingR.png","character/fallingL.png"};
     private int status = 0;
     private String dir = "";
+    private Dimension dimension;
+
+
+
+    public Player(int x, int y, Dimension dihmension) {
+        this.x = x;
+        this.y = y;
+        this.dimension = dihmension;
+        double resolutionMultiplier = dimension.getWidth()/1600;
+        System.out.println(dimension);
+        level = new Levels(currLevel, dimension, resolutionMultiplier);
+    }
 
     private int currLevel = 0;
-    private Levels level = new Levels(currLevel);
+    private Levels level;
 
     private boolean isFalling;
-    private int fallingSpeed;
+    private double fallingSpeed;
 
     private boolean isWalkingR;
     private boolean isWalkingL;
-    private int velocity = 0;
+    private double velocity = 0;
 
     private boolean isJumping;
-    private int jumpForce;
+    private double jumpForce;
 
-    private int jumpForceR;
-    private int jumpForceL;
+    private double jumpForceR;
+    private double jumpForceL;
 
     public String getPlayerAnimation(int status) {
         return playerAnimation[status];
@@ -48,11 +62,11 @@ public class Player {
         this.dir = dir;
     }
 
-    public int getVelocity() {
+    public double getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(int velocity) {
+    public void setVelocity(double velocity) {
         this.velocity = velocity;
     }
 
@@ -80,35 +94,35 @@ public class Player {
         isFalling = falling;
     }
 
-    public int getFallingSpeed() {
+    public double getFallingSpeed() {
         return fallingSpeed;
     }
 
-    public void setFallingSpeed(int fallingSpeed) {
+    public void setFallingSpeed(double fallingSpeed) {
         this.fallingSpeed = fallingSpeed;
     }
 
-    public int getJumpForce() {
+    public double getJumpForce() {
         return jumpForce;
     }
 
-    public void setJumpForce(int jumpForce) {
+    public void setJumpForce(double jumpForce) {
         this.jumpForce = jumpForce;
     }
 
-    public int getJumpForceR() {
+    public double getJumpForceR() {
         return jumpForceR;
     }
 
-    public void setJumpForceR(int jumpForceR) {
+    public void setJumpForceR(double jumpForceR) {
         this.jumpForceR = jumpForceR;
     }
 
-    public int getJumpForceL() {
+    public double getJumpForceL() {
         return jumpForceL;
     }
 
-    public void setJumpForceL(int jumpForceL) {
+    public void setJumpForceL(double jumpForceL) {
         this.jumpForceL = jumpForceL;
     }
 
@@ -134,12 +148,6 @@ public class Player {
 
     public void setJumping(boolean jumping) {
         isJumping = jumping;
-    }
-
-    public Player(int x, int y) {
-        this.x = x;
-        this.y = y;
-
     }
 
     public int getX() {

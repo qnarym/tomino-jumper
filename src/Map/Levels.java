@@ -1,34 +1,40 @@
 package Map;
 
-import Player.Player;
-
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class Levels {
 
     private int currLevel;
-    private final String[] levelMap = {"res/levels/level11.png","res/levels/level12.png"};
-    private final String[] collisionMap = {"res/levels/collisionMaps/clevel11.png","res/levels/collisionMaps/clevel12.png"};
+    private final String[] levelMap = {"levels/level11.png","levels/level12.png"};
+    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png"};
 
     private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
-    private BufferedImage image;
+    private ImageIcon imageIcon;
+    private BufferedImage bufferedImage;
 
+    private Dimension dimension;
+    private double resolutionMultiplier;
 
-    private FileInputStream fis;
-
-    public Levels(int currLevel) {
+    public Levels(int currLevel, Dimension dimension, double resolutionMultiplier) {
         this.currLevel = currLevel;
+        this.dimension = dimension;
+        this.resolutionMultiplier = resolutionMultiplier;
 
-        try {
-            fis = new FileInputStream(collisionMap[currLevel]);
-            image = ImageIO.read(fis);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try{
+            imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[currLevel]));
+            imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+            bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+            bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+        }catch (NullPointerException e){
+            System.out.println("missing file");
         }
 
     }
@@ -38,49 +44,51 @@ public class Levels {
         boolean collisionR = false;
         boolean collisionC = false;
 
-        y = y+52;
+        y = (int)(y+(50*resolutionMultiplier)+2);
 
         if (levelChanged) {
-            try {
-                fis = new FileInputStream(collisionMap[playerLevel]);
-                image = ImageIO.read(fis);
-                System.out.println(" collision map changed");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
             }
         }
 
 
         for (int i = 0; i <collisionColors.length; i++){
-            x = x+15;
+            x = (int)(x+20*resolutionMultiplier);
             try {
-                if (image.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
                     collisionC = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
             }
 
         }
         for (int i = 0; i <collisionColors.length; i++){
             x = x+5;
             try {
-                if (image.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
                     collisionL = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
             }
 
         }
         for (int i = 0; i <collisionColors.length; i++){
-            x = x+25;   
+            x = (int)(x+20*resolutionMultiplier+5);
             try {
-                if (image.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
                     collisionR = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
             }
 
         }
@@ -93,23 +101,25 @@ public class Levels {
         y = y-5;
 
         if (levelChanged) {
-            try {
-                fis = new FileInputStream(collisionMap[playerLevel]);
-                image = ImageIO.read(fis);
-                System.out.println(" collision map changed");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
             }
         }
 
         for (int i = 0; i <collisionColors.length; i++){
             try {
-                if (image.getRGB(x, y) == collisionColors[i] && y>20){
+                if (bufferedImage.getRGB(x, y) == collisionColors[i] && y>20){
                     collision = true;
-                    System.out.println("head collision");
+//                    System.out.println("head collision");
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
             }
 
         }
@@ -118,35 +128,38 @@ public class Levels {
 
     public boolean[] checkWallCollision(boolean levelChanged, int playerLevel, int x, int y) {
         int x1 = x-1;
-        int x2 = x+31;
+        int x2 = x+(int)(40*resolutionMultiplier+1);
         y = y+10;
 
         boolean collisionR = false;
         boolean collisionL = false;
 
         if (levelChanged) {
-            try {
-                fis = new FileInputStream(collisionMap[playerLevel]);
-                image = ImageIO.read(fis);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
             }
         }
         for (int i = 0; i <collisionColors.length; i++){
             try{
-                for (int j = 0; j < 35 ; j++) {
-                    if (image.getRGB(x1, y+j) == collisionColors[i]){
+                for (int j = 0; j < (int)(30*resolutionMultiplier) ; j++) {
+                    if (bufferedImage.getRGB(x1, y+j) == collisionColors[i]){
                         collisionL = true;
-                        System.out.println("wall collision found left");
+//                        System.out.println("wall collision found left");
                     }
-                    else if (image.getRGB(x2, y+j) == collisionColors[i]){
+                    else if (bufferedImage.getRGB(x2, y+j) == collisionColors[i]){
                         collisionR = true;
-                        System.out.println("wall collision found right");
+//                        System.out.println("wall collision found right");
                     }
                 }
 
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds " + e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) | " + e.getMessage());
             }
 
         }
