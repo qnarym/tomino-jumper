@@ -7,6 +7,9 @@
 ## 💀 O HŘE
 **tomíno jumper** krutopřísná platformová hra (silně nepodobná jump kingu)
 
+Hra běží na openJDK23 *link:*
+https://www.oracle.com/java/technologies/javase/jdk24-archive-downloads.html
+
 Cíl hry je se dostat až na úplný vrchol celé mapy, skládá se celkem z 5 úrovní, které jsou pohybově i dovednostně náročné, najdete zde i úroveň po, které se asi moc rádi mít moc nebudete, ale nezkusíte nevíte jak se říká..
 
 Nechť narazíte na memísky :omegalul:
