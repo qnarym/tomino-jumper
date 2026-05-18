@@ -40,19 +40,24 @@ public class SettingsScreen extends JDialog {
                 if (fpsSettings.getValue() == 0) {
 
 //                    AudioPlayer.playSound("/sounds/surak.wav");
-                    JDialog kkt = new JDialog();
-                    kkt.setModal(true);
+                    JFrame kkt = new JFrame();
                     kkt.setAlwaysOnTop(true);
                     kkt.setLocationRelativeTo(null);
                     kkt.setSize(1280,960);
+                    setAlwaysOnTop(false);
 
-                    kkt.add(new JLabel(new ImageIcon("res/surak.gif")), BorderLayout.CENTER);
+                    kkt.add(new JLabel(new ImageIcon(this.getClass().getResource("/surak.gif"))), BorderLayout.CENTER);
                     AudioPlayer.playSound("/sounds/surakxd.wav");
-
-
-
-
                     kkt.setVisible(true);
+
+                    Timer timer = new Timer(3300, event -> {
+                        kkt.dispose();
+                        setAlwaysOnTop(true);
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+
+
 
                 }
                 else {
