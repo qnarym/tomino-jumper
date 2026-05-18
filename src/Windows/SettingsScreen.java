@@ -1,5 +1,8 @@
 package Windows;
 
+import Audio.AudioPlayer;
+import Audio.Sound;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,12 +19,12 @@ public class SettingsScreen extends JDialog {
 
      public void init() {
          setResizable(false);
-         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
          setLocationRelativeTo(null);
          setLayout(new BorderLayout());
          setAlwaysOnTop(true);
 
-         JPanel panel = new JPanel();
+         JPanel panel = new JPanel(new BorderLayout());
 
 
             JLabel fpsLabel = new JLabel("FPS:");
@@ -31,6 +34,32 @@ public class SettingsScreen extends JDialog {
             fpsSettings.setMinorTickSpacing(5);
             fpsSettings.setPaintTicks(true);
             fpsSettings.setPaintLabels(true);
+
+            JButton applyButton = new JButton("Apply");
+            applyButton.addActionListener(e -> {
+                if (fpsSettings.getValue() == 0) {
+
+//                    AudioPlayer.playSound("/sounds/surak.wav");
+                    JDialog kkt = new JDialog();
+                    kkt.setModal(true);
+                    kkt.setAlwaysOnTop(true);
+                    kkt.setLocationRelativeTo(null);
+                    kkt.setSize(1280,960);
+
+                    kkt.add(new JLabel(new ImageIcon("res/surak.gif")), BorderLayout.CENTER);
+                    AudioPlayer.playSound("/sounds/surakxd.wav");
+
+
+
+
+                    kkt.setVisible(true);
+
+                }
+                else {
+                    dispose();
+                }
+            });
+            panel.add(applyButton, BorderLayout.SOUTH);
 
             fpsSettings.getModel().addChangeListener(e -> {
                 titleScreen.setFps(fpsSettings.getValue());
@@ -45,7 +74,7 @@ public class SettingsScreen extends JDialog {
                 titleScreen.setSelectedResolution(resolutionBox.getSelectedIndex());
             });
 
-         panel.add(resolutionBox,BorderLayout.SOUTH);
+         panel.add(resolutionBox,BorderLayout.EAST);
          panel.add(fpsLabel);
          panel.add(fpsSettings);
 
