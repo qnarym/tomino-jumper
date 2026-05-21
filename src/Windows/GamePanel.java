@@ -51,12 +51,13 @@ public class GamePanel extends JPanel {
 
         addKeyListener(new Movement(player));
         setFocusable(true);
-        setSize(1400,1080);
+        setSize(dimension);
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
 
         if(levelChanged){
             try{

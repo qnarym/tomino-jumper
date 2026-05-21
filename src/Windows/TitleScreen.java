@@ -2,10 +2,6 @@ package Windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 public class TitleScreen extends JFrame {
 
@@ -18,31 +14,67 @@ public class TitleScreen extends JFrame {
     private int fps = 90;
     private int selectedResolution = 0;
 
+    private String[] backgroundVar = {"titledzamp.png","goy.png","swag.png","tsBackground.png"};
+    private int backgroundIndex = 0;
+
 
     public void init() {
         setSize(800, 600);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
-        JPanel panel = new JPanel();
+        JPanel buttonPanel = new JPanel();
 
 
             JButton startGame = new JButton("Start Game");
-            panel.add(startGame);
+            JCustoms.startButton(startGame);
             startGame.setFocusable(false);
             JButton settingsButton = new JButton("Settings");
-            panel.add(settingsButton);
+            JCustoms.settingsButton(settingsButton);
             settingsButton.setFocusable(false);
             JButton exitButton = new JButton("Exit");
-            panel.add(exitButton);
+            JCustoms.exitButton(exitButton);
             exitButton.setFocusable(false);
 
+            buttonPanel.add(startGame);
+            buttonPanel.add(settingsButton);
+            buttonPanel.add(exitButton);
+            buttonPanel.setOpaque(false);
 
-        add(panel, BorderLayout.SOUTH);
-
+            ImageIcon titleBackground = new ImageIcon(this.getClass().getClassLoader().getResource(backgroundVar[backgroundIndex]));
+            titleBackground.setImage(titleBackground.getImage().getScaledInstance(850,600, Image.SCALE_SMOOTH));
             ImageIcon title = new ImageIcon(this.getClass().getClassLoader().getResource("tominojumper.gif"));
-            add(new JLabel(title), BorderLayout.CENTER);
+            JLabel titleText = new JLabel(title);
+            titleText.setBackground(Color.white);
+
+
+            JButton backgroundButton = new JButton(String.valueOf(backgroundIndex+1));
+            JCustoms.setBackground(backgroundButton);
+            backgroundButton.setFocusable(false);
+
+            JPanel coolPanel = new JPanel();
+            coolPanel.add(backgroundButton);
+            coolPanel.setOpaque(false);
+
+            JLabel titleLabel = new JLabel(titleBackground);
+            titleLabel.setLayout(new BorderLayout());
+            titleLabel.add(titleText,BorderLayout.NORTH);
+            titleLabel.add(buttonPanel, BorderLayout.SOUTH);
+            titleLabel.add(coolPanel, BorderLayout.EAST);
+            add(titleLabel, BorderLayout.CENTER);
+
+        backgroundButton.addActionListener(e -> {
+            backgroundIndex++;
+            if (backgroundIndex >= backgroundVar.length) {
+                backgroundIndex = 0;
+            }
+            titleBackground.setImage(new ImageIcon(this.getClass().getClassLoader().getResource(backgroundVar[backgroundIndex])).getImage().getScaledInstance(850,600, Image.SCALE_SMOOTH));
+            repaint();
+            backgroundButton.setText(String.valueOf(backgroundIndex+1));
+            backgroundButton.repaint();
+        });
 
         startGame.addActionListener(e -> {
             dispose();

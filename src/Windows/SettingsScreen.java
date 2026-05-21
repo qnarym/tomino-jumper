@@ -5,6 +5,7 @@ import Audio.Sound;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 public class SettingsScreen extends JDialog {
 
@@ -24,7 +25,9 @@ public class SettingsScreen extends JDialog {
          setLayout(new BorderLayout());
          setAlwaysOnTop(true);
 
-         JPanel panel = new JPanel(new BorderLayout());
+
+         JPanel panel = new JPanel(new BorderLayout(50,20));
+         JPanel fpsSettingsPanel = new JPanel(new FlowLayout());
 
 
             JLabel fpsLabel = new JLabel("FPS:");
@@ -35,19 +38,32 @@ public class SettingsScreen extends JDialog {
             fpsSettings.setPaintTicks(true);
             fpsSettings.setPaintLabels(true);
 
+            fpsSettingsPanel.add(fpsLabel);
+            fpsSettingsPanel.add(fpsSettings);
+
+             JComboBox resolutionBox = new JComboBox(resolution);
+             resolutionBox.setSelectedIndex(0);
+             resolutionBox.setVisible(true);
+             JLabel resolutionLabel = new JLabel("    Resolution:");
+
+             resolutionBox.addActionListener(e -> {
+                 titleScreen.setSelectedResolution(resolutionBox.getSelectedIndex());
+             });
+
             JButton applyButton = new JButton("Apply");
             applyButton.addActionListener(e -> {
                 if (fpsSettings.getValue() == 0) {
 
-//                    AudioPlayer.playSound("/sounds/surak.wav");
+
                     JFrame kkt = new JFrame();
                     kkt.setAlwaysOnTop(true);
-                    kkt.setLocationRelativeTo(null);
-                    kkt.setSize(1280,960);
+
+                    kkt.setSize(1280,720);
                     setAlwaysOnTop(false);
 
                     kkt.add(new JLabel(new ImageIcon(this.getClass().getResource("/surak.gif"))), BorderLayout.CENTER);
                     AudioPlayer.playSound("/sounds/surakxd.wav");
+                    kkt.setLocationRelativeTo(null);
                     kkt.setVisible(true);
 
                     Timer timer = new Timer(3300, event -> {
@@ -71,21 +87,18 @@ public class SettingsScreen extends JDialog {
             });
 
 
-            JComboBox resolutionBox = new JComboBox(resolution);
-            resolutionBox.setSelectedIndex(0);
-            resolutionBox.setVisible(true);
 
-            resolutionBox.addActionListener(e -> {
-                titleScreen.setSelectedResolution(resolutionBox.getSelectedIndex());
-            });
 
-         panel.add(resolutionBox,BorderLayout.EAST);
-         panel.add(fpsLabel);
-         panel.add(fpsSettings);
+         panel.add(resolutionBox,BorderLayout.CENTER);
+         panel.add(resolutionLabel,BorderLayout.WEST);
+
+         panel.add(fpsSettingsPanel, BorderLayout.NORTH);
+         panel.add(new JLabel(""), BorderLayout.EAST);
 
 
             add(panel, BorderLayout.CENTER);
-         setSize(600, 150);
+         setSize(350, 200);
+         setLocationRelativeTo(null);
          setVisible(true);
      }
 
