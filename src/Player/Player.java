@@ -1,6 +1,8 @@
 package Player;
 
-import Map.Levels;
+import Audio.AudioPlayer;
+import Audio.MusicPlayer;
+import Map.*;
 
 import java.awt.*;
 
@@ -15,6 +17,9 @@ public class Player {
     private String dir = "";
     private Dimension dimension;
 
+    private Store store;
+    private Inventory inventory;
+
 
 
     public Player(int x, int y, Dimension dihmension) {
@@ -24,6 +29,16 @@ public class Player {
         double resolutionMultiplier = dimension.getWidth()/1600;
         System.out.println(dimension);
         level = new Levels(currLevel, dimension, resolutionMultiplier);
+
+       store = new Store(this, resolutionMultiplier);
+       inventory = new Inventory(this, resolutionMultiplier);
+    }
+
+    public void openStore(){
+        store.init();
+    }
+    public void openInventory(){
+        inventory.init();
     }
 
     private int currLevel = 0;

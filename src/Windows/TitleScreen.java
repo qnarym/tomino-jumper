@@ -12,7 +12,7 @@ public class TitleScreen extends JFrame {
     }
 
     private int fps = 90;
-    private int selectedResolution = 0;
+    private int selectedResolution = 1;
 
     private String[] backgroundVar = {"titledzamp.png","goy.png","swag.png","tsBackground.png"};
     private int backgroundIndex = 0;
@@ -50,7 +50,7 @@ public class TitleScreen extends JFrame {
             titleText.setBackground(Color.white);
 
 
-            JButton backgroundButton = new JButton(String.valueOf(backgroundIndex+1));
+            JButton backgroundButton = new JButton();
             JCustoms.setBackground(backgroundButton);
             backgroundButton.setFocusable(false);
 
@@ -72,7 +72,6 @@ public class TitleScreen extends JFrame {
             }
             titleBackground.setImage(new ImageIcon(this.getClass().getClassLoader().getResource(backgroundVar[backgroundIndex])).getImage().getScaledInstance(850,600, Image.SCALE_SMOOTH));
             repaint();
-            backgroundButton.setText(String.valueOf(backgroundIndex+1));
             backgroundButton.repaint();
         });
 

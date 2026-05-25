@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
     private ImageIcon image;
     private BufferedImage character;
 
+
     private Dimension dimension;
     private double resolutionMultiplier;
 
@@ -31,6 +32,7 @@ public class GamePanel extends JPanel {
         this.x = (int)(startX*resolutionMultiplier);
         player = new Player(x,y, dimension);
         player.setCurrLevel(0);
+
 
         try{
             image =  new ImageIcon(this.getClass().getClassLoader().getResource(player.getLevel().getLevel(player.getCurrLevel())));
@@ -57,7 +59,6 @@ public class GamePanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
 
         if(levelChanged){
             try{

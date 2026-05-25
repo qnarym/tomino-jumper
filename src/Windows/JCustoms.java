@@ -36,10 +36,9 @@ public class JCustoms {
     }
 
     public static void setBackground(JButton button){
-        button.setBackground(new Color(0, 0, 0));
+        button.setBackground(new Color(0, 0, 0, 50));
         button.setForeground(Color.BLACK);
-        button.setFont(new Font("Arial", Font.BOLD, 15));
-        button.setPreferredSize(new Dimension(35,35));
+        button.setPreferredSize(new Dimension(20,20));
     }
 
 

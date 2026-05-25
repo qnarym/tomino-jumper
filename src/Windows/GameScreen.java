@@ -17,8 +17,8 @@ public class GameScreen extends JFrame{
     private GameLoop gameLoop;
     private Thread gameThread;
 
-    private final int[] possibleWidth = {1600,1200,800};
-    private final int[] possibleHeight = {1080,820,600};
+    private final int[] possibleWidth = {2000,1600,1200};
+    private final int[] possibleHeight = {1360,1080,820};
 
     private final String[] helpLinks = {"https://www.instagram.com/p/DRVNGzkDU_g/","https://www.instagram.com/p/DP4aAV2jYtI/","https://www.instagram.com/p/DPJu-F9DWUB/","https://www.instagram.com/p/DORYBdxjaL8/",
                                         "https://www.instagram.com/p/DOCLm6tDTPw/","https://www.instagram.com/p/DNOW8y4sDXl/","https://www.instagram.com/p/DL5PN1mKHcy/","https://www.instagram.com/p/DJcWL-5Ojev/",

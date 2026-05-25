@@ -10,7 +10,7 @@ import java.io.*;
 public class SettingsScreen extends JDialog {
 
     private TitleScreen titleScreen;
-    private final String[] resolution = {"1600x1080","1200x810","800x540"};
+    private final String[] resolution = {"2000x1350","1600x1080","1200x810"};
 
      public SettingsScreen(Frame owner, TitleScreen titleScreen) {
          super(owner, "tomino jumper: settings", true);
@@ -42,7 +42,7 @@ public class SettingsScreen extends JDialog {
             fpsSettingsPanel.add(fpsSettings);
 
              JComboBox resolutionBox = new JComboBox(resolution);
-             resolutionBox.setSelectedIndex(0);
+             resolutionBox.setSelectedIndex(1);
              resolutionBox.setVisible(true);
              JLabel resolutionLabel = new JLabel("    Resolution:");
 
