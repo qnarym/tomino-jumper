@@ -44,6 +44,8 @@ public class Player {
     private int currLevel = 0;
     private Levels level;
 
+    private double coins = 0;
+
     private boolean isFalling;
     private double fallingSpeed;
 
@@ -59,6 +61,22 @@ public class Player {
 
     public String getPlayerAnimation(int status) {
         return playerAnimation[status];
+    }
+
+    public double getCoins() {
+        return coins;
+    }
+
+    public void setCoins(double coins) {
+        this.coins = coins;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public int getStatus() {

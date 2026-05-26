@@ -29,13 +29,13 @@ public class TitleScreen extends JFrame {
 
 
             JButton startGame = new JButton("Start Game");
-            JCustoms.startButton(startGame);
+            JCustoms.titleScreenButton(startGame);
             startGame.setFocusable(false);
             JButton settingsButton = new JButton("Settings");
-            JCustoms.settingsButton(settingsButton);
+            JCustoms.titleScreenButton(settingsButton);
             settingsButton.setFocusable(false);
             JButton exitButton = new JButton("Exit");
-            JCustoms.exitButton(exitButton);
+            JCustoms.titleScreenButton(exitButton);
             exitButton.setFocusable(false);
 
             buttonPanel.add(startGame);
@@ -47,7 +47,6 @@ public class TitleScreen extends JFrame {
             titleBackground.setImage(titleBackground.getImage().getScaledInstance(850,600, Image.SCALE_SMOOTH));
             ImageIcon title = new ImageIcon(this.getClass().getClassLoader().getResource("tominojumper.gif"));
             JLabel titleText = new JLabel(title);
-            titleText.setBackground(Color.white);
 
 
             JButton backgroundButton = new JButton();
