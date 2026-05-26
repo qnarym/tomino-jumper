@@ -74,6 +74,7 @@ public class GameLoop implements Runnable{
              */
             if(player.getY()<0){
                 player.setCurrLevel(player.getCurrLevel()+1);
+                player.setCoins(player.getCoins()+10);
                 System.out.println("level changed: " +player.getCurrLevel());
                 player.setY((int)(1000*panel.getResolutionMultiplier()));
                 panel.setLevelChanged(true);
@@ -81,6 +82,7 @@ public class GameLoop implements Runnable{
             }
             else if(player.getY()>(int)(1010*panel.getResolutionMultiplier())&&player.getCurrLevel()!=0){
                 player.setCurrLevel(player.getCurrLevel()-1);
+                player.setCoins(player.getCoins()-10);
                 System.out.println("level changed: " +player.getCurrLevel());
                 player.setY(0);
                 panel.setLevelChanged(true);
@@ -200,16 +202,16 @@ public class GameLoop implements Runnable{
                     player.setDir("Jright");
                 }
             }
-            else if (player.isJumping() && player.getJumpForceR()==0 && player.getJumpForceL()==0 && !player.isFalling()  ) {
-                try {
-                    Thread.sleep(32);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                if(player.isJumping()&&player.getJumpForce()<150 ){
-                    player.setJumpForce(player.getJumpForce()+10);
-                }
-            }
+//            else if (player.isJumping() && player.getJumpForceR()==0 && player.getJumpForceL()==0 && !player.isFalling()  ) {
+//                try {
+//                    Thread.sleep(32);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                if(player.isJumping()&&player.getJumpForce()<150 ){
+//                    player.setJumpForce(player.getJumpForce()+10);
+//                }
+//            }
 
             /**
              * player movement when falling

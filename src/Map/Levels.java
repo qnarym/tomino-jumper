@@ -12,8 +12,8 @@ import java.io.InputStream;
 public class Levels {
 
     private int currLevel;
-    private final String[] levelMap = {"levels/level11.png","levels/level12.png"};
-    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png"};
+    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png"};
+    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png"};
 
     private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
     private ImageIcon imageIcon;
