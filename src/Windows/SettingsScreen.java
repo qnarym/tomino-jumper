@@ -26,8 +26,22 @@ public class SettingsScreen extends JDialog {
          setAlwaysOnTop(true);
 
 
+
          JPanel panel = new JPanel(new BorderLayout(50,20));
          JPanel fpsSettingsPanel = new JPanel(new FlowLayout());
+
+            JCheckBox chargebarVisible = new JCheckBox("Show chargebar");
+            chargebarVisible.setHorizontalAlignment(SwingConstants.CENTER);
+            chargebarVisible.setSelected(true);
+            chargebarVisible.setFocusable(false);
+            chargebarVisible.addActionListener(e -> {
+                if(chargebarVisible.isSelected()) {
+                    titleScreen.setChargebarVisible(true);
+                }
+                else {
+                    titleScreen.setChargebarVisible(false);
+                }
+            });
 
 
             JLabel fpsLabel = new JLabel("FPS:");
@@ -97,6 +111,7 @@ public class SettingsScreen extends JDialog {
 
 
             add(panel, BorderLayout.CENTER);
+            add(chargebarVisible, BorderLayout.NORTH);
          setSize(350, 200);
          setLocationRelativeTo(null);
          setVisible(true);

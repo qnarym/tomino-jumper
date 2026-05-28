@@ -56,6 +56,7 @@ public class GameLoop implements Runnable{
             if (player.getLevel().checkPlatformCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]) {
                 player.setFalling(false);
                 player.setFallingSpeed(0);
+                player.setHadJumped(false);
                 if (player.getFallingSpeed()==0 && !player.getDir().equals("Jright") && player.getDir().equals("right")){
                     player.setStatus(0);
                 }
@@ -107,6 +108,7 @@ public class GameLoop implements Runnable{
                     player.setX(player.getX() - (int)(5*panel.getResolutionMultiplier()));
                     player.setVelocity(-40);
                     player.setDir("Jleft");
+                    player.setHadJumped(true);
                 }
                 else{
                     player.setJumpForceR(40);
@@ -123,6 +125,7 @@ public class GameLoop implements Runnable{
                     player.setX(player.getX() + (int)(5*panel.getResolutionMultiplier()));
                     player.setVelocity(40);
                     player.setDir("Jright");
+                    player.setHadJumped(true);
                 }
                 else{
                     player.setJumpForceL(40);
@@ -176,7 +179,7 @@ public class GameLoop implements Runnable{
             /**
              * logic of charging the jump (diagonal+straight up)
              */
-             if (player.isJumping() && player.isWalkingL() && player.getJumpForceR()==0 && player.getJumpForce()==0 && !player.isFalling()  ) {
+             if (player.isJumping() && player.isWalkingL() && player.getJumpForceR()==0 && player.getJumpForce()==0 && !player.isFalling() && !player.isHadJumped()) {
                 try {
                     Thread.sleep(32);
                 } catch (InterruptedException e) {
@@ -189,7 +192,7 @@ public class GameLoop implements Runnable{
                     player.setDir("Jleft");
                 }
             }
-             if (player.isJumping()&&player.isWalkingR() && player.getJumpForceL()==0 && player.getJumpForce()==0 && !player.isFalling()){
+             if (player.isJumping()&&player.isWalkingR() && player.getJumpForceL()==0 && player.getJumpForce()==0 && !player.isFalling() && !player.isHadJumped()){
                 try {
                     Thread.sleep(32);
                 } catch (InterruptedException e) {

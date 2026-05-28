@@ -17,6 +17,8 @@ public class TitleScreen extends JFrame {
     private String[] backgroundVar = {"titledzamp.png","goy.png","swag.png","tsBackground.png"};
     private int backgroundIndex = 0;
 
+    private boolean chargebarVisible = true;
+
 
     public void init() {
         setSize(800, 600);
@@ -78,7 +80,8 @@ public class TitleScreen extends JFrame {
             dispose();
             System.out.println(fps);
             System.out.println(selectedResolution);
-            new GameScreen(fps, selectedResolution).init();
+            System.out.println(chargebarVisible);
+            new GameScreen(fps, selectedResolution, chargebarVisible).init();
         });
 
         settingsButton.addActionListener(e -> {
@@ -94,6 +97,9 @@ public class TitleScreen extends JFrame {
         setVisible(true);
     }
 
+    public void setChargebarVisible(boolean chargebarVisible) {
+        this.chargebarVisible = chargebarVisible;
+    }
 
     public void setSelectedResolution(int selectedResolution) {
         this.selectedResolution = selectedResolution;

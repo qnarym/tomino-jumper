@@ -32,7 +32,9 @@ public class Movement implements KeyListener{
         }
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_SPACE -> player.setJumping(true);
+            case KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_SPACE -> {
+                if(!player.isHadJumped()) player.setJumping(true);
+            }
             case KeyEvent.VK_LEFT, KeyEvent.VK_A  -> player.setWalkingL(true);
             case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> player.setWalkingR(true);
             case KeyEvent.VK_I -> player.openInventory();

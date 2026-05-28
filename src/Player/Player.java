@@ -55,6 +55,7 @@ public class Player {
 
     private boolean isJumping;
     private double jumpForce;
+    private boolean hadJumped;
 
     private double jumpForceR;
     private double jumpForceL;
@@ -65,6 +66,14 @@ public class Player {
 
     public double getCoins() {
         return coins;
+    }
+
+    public boolean isHadJumped() {
+        return hadJumped;
+    }
+
+    public void setHadJumped(boolean hadJumped) {
+        this.hadJumped = hadJumped;
     }
 
     public void setCoins(double coins) {
