@@ -214,6 +214,21 @@ public class GameLoop implements Runnable{
 //            }
 
             /**
+             * player sliding movement when on slope
+             */
+            if (player.getLevel().checkSlopedCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[0]){
+                int sliding = (int)player.getFallingSpeed();
+                player.setX(player.getX() - sliding*2);
+                System.out.println("sliding left");
+            }
+            if (player.getLevel().checkSlopedCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]){
+                int sliding = (int)player.getFallingSpeed();
+                player.setX(player.getX() + sliding*2);
+                System.out.println("sliding right");
+            }
+
+
+            /**
              * player movement when falling
              */
             if (player.isFalling()){
@@ -229,6 +244,7 @@ public class GameLoop implements Runnable{
                     player.setStatus(7);
                 }
                 else if (player.getVelocity()>0 && !player.getLevel().checkWallCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]) {
+
                     player.setX(player.getX() + (int)player.getVelocity()/5);
                     player.setStatus(6);
                 }

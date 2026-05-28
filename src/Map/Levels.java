@@ -12,10 +12,11 @@ import java.io.InputStream;
 public class Levels {
 
     private int currLevel;
-    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png"};
-    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png"};
+    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png","levels/level22.png","levels/level31.png"};
+    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png","levels/collisionMaps/clevel22.png","levels/collisionMaps/clevel31.png"};
 
     private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
+    private final int[] slopedCollisionColors = {new Color(0,255,255).getRGB(), new Color(255,0,255).getRGB()};
     private ImageIcon imageIcon;
     private BufferedImage bufferedImage;
 
@@ -36,6 +37,78 @@ public class Levels {
         }catch (NullPointerException e){
             System.out.println("missing file");
         }
+
+    }
+
+    public boolean[] checkSlopedCollision(boolean levelChanged, int playerLevel, int x, int y){
+        boolean collisionL = false;
+        boolean collisionR = false;
+        boolean collisionC = false;
+
+        boolean slidingR = false;
+        boolean slidingL = false;
+        int foundColor = 0;
+
+        y = (int)(y+(50*resolutionMultiplier)+2);
+
+        if (levelChanged) {
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
+            }
+        }
+        for (int i = 0; i < slopedCollisionColors.length; i++){
+            int xC = (int)(x+20*resolutionMultiplier);
+            try {
+                if (bufferedImage.getRGB(xC, y) == slopedCollisionColors[i]){
+                    collisionC = true;
+                    foundColor = slopedCollisionColors[i];
+                    System.out.println("collision foundC");
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+            }
+        }
+        for (int i = 0; i <slopedCollisionColors.length; i++){
+            int xL = x+2;
+            try {
+                if (bufferedImage.getRGB(xL, y) == slopedCollisionColors[i]){
+                    collisionL = true;
+                    foundColor = slopedCollisionColors[i];
+                    System.out.println("collision foundL");
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+            }
+
+        }
+        for (int i = 0; i <slopedCollisionColors.length; i++){
+            int xR = (int)(x+38*resolutionMultiplier);
+            try {
+                if (bufferedImage.getRGB(xR, y) == slopedCollisionColors[i]){
+                    collisionR = true;
+                    foundColor = slopedCollisionColors[i];
+                    System.out.println("collision foundR");
+                }
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+            }
+
+        }
+
+        if (collisionL || collisionR || collisionC){
+            switch (foundColor){
+                case -16711681 -> slidingL = true;
+                case -65281 -> slidingR = true;
+            }
+        }
+
+        return new boolean[]{slidingL,slidingR};
 
     }
 
