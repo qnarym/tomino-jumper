@@ -1,21 +1,20 @@
 package Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 
+/**
+ * Class to check player hitboxes that returns true/false if match is found
+ */
 public class Levels {
 
     private int currLevel;
-    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png","levels/level22.png","levels/level31.png","levels/level32.png"};
-    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png","levels/collisionMaps/clevel22.png","levels/collisionMaps/clevel31.png","levels/collisionMaps/clevel32.png"};
+    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png","levels/level22.png","levels/level31.png","levels/level32.png","levels/level41.png","levels/level42.png","levels/level51.png"};
+    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png","levels/collisionMaps/clevel22.png","levels/collisionMaps/clevel31.png","levels/collisionMaps/clevel32.png","levels/collisionMaps/clevel41.png","levels/collisionMaps/clevel42.png","levels/collisionMaps/clevel51.png"};
 
-    private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
+    private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(0,0,255).getRGB(), new Color(0,255,0).getRGB(), new Color(255,255,0).getRGB(), new Color(100,255,100).getRGB()};
     private final int[] slopedCollisionColors = {new Color(0,255,255).getRGB(), new Color(255,0,255).getRGB()};
     private ImageIcon imageIcon;
     private BufferedImage bufferedImage;
@@ -28,6 +27,7 @@ public class Levels {
         this.dimension = dimension;
         this.resolutionMultiplier = resolutionMultiplier;
 
+        //preload of collision map
         try{
             imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[currLevel]));
             imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
@@ -40,7 +40,44 @@ public class Levels {
 
     }
 
+    /**
+     * check defined points of player hitbox if it matches specific color (checks if platform is iced)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
     public boolean checkIcedPlatform(boolean levelChanged, int playerLevel, int x, int y){
+        x = (int)(x+20*resolutionMultiplier);
+        y = (int)(y+50*resolutionMultiplier+2);
+
+        if (levelChanged) {
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
+            }
+        }
+        if (bufferedImage.getRGB(x,y) == new Color(0,0,255).getRGB()){
+            return true;
+        }
+        else return false;
+    }
+
+    /**
+     * check defined points of player hitbox if it matches specific color
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
+    public boolean checkPopUp(boolean levelChanged, int playerLevel, int x, int y){
         x = (int)(x+20*resolutionMultiplier);
         y = (int)(y+50*resolutionMultiplier+2);
 
@@ -61,6 +98,46 @@ public class Levels {
         else return false;
     }
 
+    /**
+     * check defined points of player hitbox if it matches specific color (checks if player reached end of the game)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
+    public boolean checkWin(boolean levelChanged, int playerLevel, int x, int y){
+        x = (int)(x+20*resolutionMultiplier);
+        y = (int)(y+50*resolutionMultiplier+2);
+
+        if (levelChanged) {
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
+            }
+        }
+
+        if (bufferedImage.getRGB(x,y) == new Color(255,255,0).getRGB()){
+            System.out.print("\rGame Completed 👑");
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * check defined points of player hitbox if it matches specific color (checks if surface below player is sloped)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
     public boolean[] checkSlopedCollision(boolean levelChanged, int playerLevel, int x, int y){
         boolean collisionL = false;
         boolean collisionR = false;
@@ -89,10 +166,10 @@ public class Levels {
                 if (bufferedImage.getRGB(xC, y) == slopedCollisionColors[i]){
                     collisionC = true;
                     foundColor = slopedCollisionColors[i];
-                    System.out.println("collision foundC");
+//                    System.out.println("collision foundC");
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
         }
         for (int i = 0; i <slopedCollisionColors.length; i++){
@@ -101,10 +178,10 @@ public class Levels {
                 if (bufferedImage.getRGB(xL, y) == slopedCollisionColors[i]){
                     collisionL = true;
                     foundColor = slopedCollisionColors[i];
-                    System.out.println("collision foundL");
+//                    System.out.println("collision foundL");
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
@@ -114,10 +191,10 @@ public class Levels {
                 if (bufferedImage.getRGB(xR, y) == slopedCollisionColors[i]){
                     collisionR = true;
                     foundColor = slopedCollisionColors[i];
-                    System.out.println("collision foundR");
+//                    System.out.println("collision foundR");
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
@@ -133,6 +210,14 @@ public class Levels {
 
     }
 
+    /**
+     * check defined points of player hitbox if it matches specific color (checks surface under player to find collision)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
     public boolean[] checkPlatformCollision(boolean levelChanged, int playerLevel, int x, int y) {
         boolean collisionL = false;
         boolean collisionR = false;
@@ -154,41 +239,49 @@ public class Levels {
 
 
         for (int i = 0; i <collisionColors.length; i++){
-            x = (int)(x+20*resolutionMultiplier);
+            int xC = (int)(x+20*resolutionMultiplier);
             try {
-                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(xC, y) == collisionColors[i]){
                     collisionC = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
         for (int i = 0; i <collisionColors.length; i++){
-            x = x+5;
+            int xL = x+5;
             try {
-                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(xL, y) == collisionColors[i]){
                     collisionL = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
         for (int i = 0; i <collisionColors.length; i++){
-            x = (int)(x+20*resolutionMultiplier+5);
+            int xR = (int)(x+20*resolutionMultiplier+5);
             try {
-                if (bufferedImage.getRGB(x, y) == collisionColors[i]){
+                if (bufferedImage.getRGB(xR, y) == collisionColors[i]){
                     collisionR = true;
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
         return new boolean[]{collisionL,collisionC,collisionR};
     }
 
+    /**
+     * check defined points of player hitbox if it matches specific color (checks surface above player)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
     public boolean checkHeadCollision(boolean levelChanged, int playerLevel, int x, int y) {
         boolean collision = false;
         x = x+15;
@@ -213,13 +306,21 @@ public class Levels {
 //                    System.out.println("head collision");
                 }
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | "+e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
         return collision;
     }
 
+    /**
+     * check defined points of player hitbox if it matches specific color (checks if player is near wall to find collision)
+     * @param levelChanged boolean that prevents of lagging the game due to reloading the picture over and over without reason
+     * @param playerLevel players current level to load the image
+     * @param x player X location
+     * @param y player Y location
+     * @return true/false if it finds match of defined color
+     */
     public boolean[] checkWallCollision(boolean levelChanged, int playerLevel, int x, int y) {
         int x1 = x-1;
         int x2 = x+(int)(40*resolutionMultiplier+1);
@@ -253,13 +354,14 @@ public class Levels {
                 }
 
             }catch (ArrayIndexOutOfBoundsException e){
-                System.err.println("player is out of bounds (might be due to level change) | " + e.getMessage());
+                System.err.println("player is out of bounds (might be due to level change) +"+ x +":"+ y+" | "+e.getMessage());
             }
 
         }
         return new boolean[]{collisionL, collisionR};
     }
 
+    //getters 💀
     public String getLevel(int currLevel){
         return levelMap[currLevel];
     }

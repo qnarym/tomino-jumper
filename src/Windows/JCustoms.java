@@ -3,6 +3,9 @@ package Windows;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class used for customizing buttons
+ */
 public class JCustoms {
 
     public static void titleScreenButton(JButton button){

@@ -1,13 +1,16 @@
 package Player;
 
-import Map.Store;
-import Windows.SettingsScreen;
-import Windows.TitleScreen;
-
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
 
+/**
+ * Customized keylistener
+ */
 public class Movement implements KeyListener{
 
 
@@ -26,18 +29,22 @@ public class Movement implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == storeKeyEvents[key]){
-            player.openStore();
-            key = new Random().nextInt(storeKeyEvents.length);
-        }
-
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_SPACE -> {
                 if(!player.isHadJumped()) player.setJumping(true);
             }
             case KeyEvent.VK_LEFT, KeyEvent.VK_A  -> player.setWalkingL(true);
             case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> player.setWalkingR(true);
-            case KeyEvent.VK_I -> player.openInventory();
+            case KeyEvent.VK_Q -> player.setReadSign(true);
+            case KeyEvent.VK_B -> {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://docs.google.com/forms/d/e/1FAIpQLSdhzikw8zP-5yTDZM-Q36Mvle3b5o5eXJShwR5cS4YXCn_ieQ/viewform"));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (URISyntaxException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
 
@@ -47,7 +54,7 @@ public class Movement implements KeyListener{
             case KeyEvent.VK_UP, KeyEvent.VK_W, KeyEvent.VK_SPACE -> player.setJumping(false);
             case KeyEvent.VK_LEFT, KeyEvent.VK_A  -> player.setWalkingL(false);
             case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> player.setWalkingR(false);
-
+            case KeyEvent.VK_Q -> player.setReadSign(false);
         }
     }
 
