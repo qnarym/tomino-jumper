@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 
+/**
+ * Class  for settings screen, returns value that other classes use to select desired size or adjust values
+ */
 public class SettingsScreen extends JDialog {
 
     private TitleScreen titleScreen;

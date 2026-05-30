@@ -3,9 +3,10 @@ package Windows;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Titlescreen of the game, recieves user's settings and pass them further to another classes that use them for adjustments
+ */
 public class TitleScreen extends JFrame {
-
-
 
     public TitleScreen() {
           super("tomino jumper: Main menu");

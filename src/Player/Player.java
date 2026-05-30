@@ -1,12 +1,11 @@
 package Player;
 
-import Audio.AudioPlayer;
-import Audio.MusicPlayer;
 import Map.*;
-
 import java.awt.*;
 
-
+/**
+ * Player class, holds variables and basic info about player for game logic to work with
+ */
 public class Player {
 
     private int x;
@@ -17,10 +16,6 @@ public class Player {
     private String dir = "";
     private Dimension dimension;
 
-    private Store store;
-    private Inventory inventory;
-
-
 
     public Player(int x, int y, Dimension dihmension) {
         this.x = x;
@@ -29,22 +24,12 @@ public class Player {
         double resolutionMultiplier = dimension.getWidth()/1600;
         System.out.println(dimension);
         level = new Levels(currLevel, dimension, resolutionMultiplier);
-
-       store = new Store(this, resolutionMultiplier);
-       inventory = new Inventory(this, resolutionMultiplier);
     }
 
-    public void openStore(){
-        store.init();
-    }
-    public void openInventory(){
-        inventory.init();
-    }
+
 
     private int currLevel = 0;
     private Levels level;
-
-    private double coins = 0;
 
     private boolean isFalling;
     private double fallingSpeed;
@@ -57,15 +42,30 @@ public class Player {
     private double jumpForce;
     private boolean hadJumped;
 
+    private boolean readSign;
+
     private double jumpForceR;
     private double jumpForceL;
 
-    public String getPlayerAnimation(int status) {
-        return playerAnimation[status];
+    /**
+     * method to keep player still when popup window opens
+     */
+    public void stayStill(){
+        isWalkingL = false;
+        isWalkingR = false;
+        velocity = 0;
     }
 
-    public double getCoins() {
-        return coins;
+    public boolean isReadSign() {
+        return readSign;
+    }
+
+    public void setReadSign(boolean readSign) {
+        this.readSign = readSign;
+    }
+
+    public String getPlayerAnimation(int status) {
+        return playerAnimation[status];
     }
 
     public boolean isHadJumped() {
@@ -74,18 +74,6 @@ public class Player {
 
     public void setHadJumped(boolean hadJumped) {
         this.hadJumped = hadJumped;
-    }
-
-    public void setCoins(double coins) {
-        this.coins = coins;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
     }
 
     public int getStatus() {

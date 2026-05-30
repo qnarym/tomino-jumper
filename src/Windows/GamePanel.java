@@ -9,7 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-
+/**
+ * Panel with whole game that is added into GameScreen, takes care of chargebar values and whole graphics of the game
+ */
 public class GamePanel extends JPanel {
 
     private int x;
@@ -19,17 +21,20 @@ public class GamePanel extends JPanel {
     private BufferedImage character;
     private JProgressBar charge;
 
+    private boolean gameComplete;
+    private GameScreen gameScreen;
 
     private Dimension dimension;
     private double resolutionMultiplier;
 
     private boolean levelChanged;
 
-    public GamePanel(int startX, int startY, Dimension dimension, JProgressBar chargeBar) {
+    public GamePanel(int startX, int startY, Dimension dimension, JProgressBar chargeBar, GameScreen gameScreen) {
         this.dimension = dimension;
         resolutionMultiplier = dimension.getWidth()/1600;
 
         this.charge = chargeBar;
+        this.gameScreen = gameScreen;
 
         this.y = (int)(startY*resolutionMultiplier);
         this.x = (int)(startX*resolutionMultiplier);
@@ -59,9 +64,14 @@ public class GamePanel extends JPanel {
         setSize(dimension);
     }
 
+    public void gameComplete(){
+        gameScreen.gameComplete();
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
 
         if(levelChanged){
             try{
@@ -117,6 +127,14 @@ public class GamePanel extends JPanel {
                 case 150 -> charge.setForeground(new Color(0, 175, 0));
             }
         }
+    }
+
+    public boolean isGameComplete() {
+        return gameComplete;
+    }
+
+    public void setGameComplete(boolean gameComplete) {
+        this.gameComplete = gameComplete;
     }
 
     public Dimension getDimension() {

@@ -10,7 +10,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Random;
 
-
+/**
+ * Class of the game window, starts game thread, which is used by GameLoop, Adds buttons and take care of chargebar
+ */
 public class GameScreen extends JFrame{
 
     private GamePanel gamePanel;
@@ -36,7 +38,7 @@ public class GameScreen extends JFrame{
             dimension = new Dimension(possibleWidth[selectedResolution],possibleHeight[selectedResolution]);
             chargeBar = new JProgressBar(0,150);
 
-            gamePanel = new GamePanel(700,900, dimension, chargeBar);
+            gamePanel = new GamePanel(700,900, dimension, chargeBar, this);
             gameLoop = new GameLoop(gamePanel, gamePanel.getPlayer(), fps);
             gameThread = new Thread(gameLoop);
 
@@ -96,6 +98,36 @@ public class GameScreen extends JFrame{
             add(gameLabel);
             setLocationRelativeTo(null);
             setVisible(true);
-
         }
+
+        public void gameComplete(){
+            Timer timer = new Timer(500, event -> {
+                dispose();
+            });
+            timer.setRepeats(false);
+            timer.start();
+            gamePanel.setGameComplete(true);
+
+            JFrame frame = new JFrame("tomino jumper: Game complete");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1024,512);
+            frame.setLayout(null);
+
+            JLabel crown = new JLabel(new ImageIcon(this.getClass().getClassLoader().getResource("crown.gif")));
+            crown.setOpaque(false);
+            crown.setBounds(0,0,1024,512);
+            JLabel label = new JLabel("Game completed");
+            label.setFont(new Font("Arial",Font.BOLD,20));
+            label.setForeground(Color.WHITE);
+            label.setBounds(430,180,1024,512);
+
+            frame.setLocationRelativeTo(null);
+
+            frame.add(label);
+            frame.add(crown);
+
+            frame.setResizable(false);
+            frame.setVisible(true);
+        }
+
 }

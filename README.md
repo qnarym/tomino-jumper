@@ -7,7 +7,7 @@
 ## 💀 O HŘE
 **tomíno jumper** krutopřísná platformová hra (silně nepodobná jump kingu)
 
-Hra běží na openJDK23 *link:*
+Hra běží na openJDK24 *link:*
 https://www.oracle.com/java/technologies/javase/jdk24-archive-downloads.html
 
 Cíl hry je se dostat až na úplný vrchol celé mapy, skládá se celkem z 5 úrovní, které jsou pohybově i dovednostně náročné, najdete zde i úroveň po, které se asi moc rádi mít moc nebudete, ale nezkusíte nevíte jak se říká..
@@ -16,15 +16,24 @@ Nechť narazíte na memísky :omegalul:
 
 ## 🕹️ Ovládání
 
-| Čudla | Popis |
-| :--- | :--- |
-| **W / Space** | skok jak jinak xd`. |
-| **A / D** | pohyb do stran, A logicky do leva a D logicky do prava haha (dzouk |
-| **S** | co bys tady chtěl dělat S |
-| **↑↓←→** | šipky ovšem taktéž fungují |
+| Čudla         | Popis                                                              |
+|:--------------|:-------------------------------------------------------------------|
+| **W / Space** | skok jak jinak xd.                                                 |
+| **A / D**     | pohyb do stran, A logicky do leva a D logicky do prava haha (dzouk |
+| **↑↓←→**      | šipky ovšem taktéž fungují                                         |
+| **Q**         | přečte cedulku                                                     |
+| **S**         | co bys tady chtěl dělat S                                          |
+| **B**         | otevře na vychozím prohlížeči bug report                           |
+#
+↓↓↓
+---
 
-obchod  existuje ale až během hry zjístíš jakym zpusobem visco
+---
+##
 
+![Ukázka mapy](WholeMap.png)
+#
+#
 ![Ukázka hry](res/tsBackground.png)
 
 

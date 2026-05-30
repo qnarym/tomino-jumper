@@ -1,6 +1,7 @@
 package Windows;
 
 import Audio.AudioPlayer;
+import Map.PopUpMemes;
 import Player.Player;
 
 import javax.imageio.ImageIO;
@@ -9,18 +10,24 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Class that does everything in the game such as: checks collision via Levels, movement logic & jump logic and repaints whole GamePanel
+ */
 public class GameLoop implements Runnable{
 
-    private GamePanel panel;
+    private final GamePanel panel;
     private final Player player;
     private int FPS = 90;
-    private BufferedImage image;
+    private final BufferedImage image;
+    private final PopUpMemes popUpMemes;
 
 
     public GameLoop(GamePanel panel, Player player, int FPS) {
         this.panel = panel;
         this.player = player;
         this.FPS = FPS;
+
+        popUpMemes = new PopUpMemes();
 
         try {
             InputStream input = this.getClass().getClassLoader().getResourceAsStream(player.getLevel().getLevel(player.getCurrLevel()));
@@ -75,20 +82,38 @@ public class GameLoop implements Runnable{
              */
             if(player.getY()<0){
                 player.setCurrLevel(player.getCurrLevel()+1);
-                player.setCoins(player.getCoins()+10);
                 System.out.println("level changed: " +player.getCurrLevel());
                 player.setY((int)(1000*panel.getResolutionMultiplier()));
                 panel.setLevelChanged(true);
                 panel.repaint();
+                popUpMemes.setCurrLevel(player.getCurrLevel());
             }
             else if(player.getY()>(int)(1010*panel.getResolutionMultiplier())&&player.getCurrLevel()!=0){
                 player.setCurrLevel(player.getCurrLevel()-1);
-                player.setCoins(player.getCoins()-10);
                 System.out.println("level changed: " +player.getCurrLevel());
                 player.setY(0);
                 panel.setLevelChanged(true);
                 panel.repaint();
+                popUpMemes.setCurrLevel(player.getCurrLevel());
             }
+
+            /**
+             * winning condition
+             */
+            if(player.getLevel().checkWin(panel.isLevelChanged(),  player.getCurrLevel(), player.getX(), player.getY()) && !panel.isGameComplete()){
+                panel.gameComplete();
+            }
+
+
+            /**
+             * pop up memes
+             */
+            if(player.getLevel().checkPopUp(panel.isLevelChanged(),  player.getCurrLevel(), player.getX(), player.getY()) && player.isReadSign()){
+                popUpMemes.init();
+                player.stayStill();
+                player.setReadSign(false);
+            }
+
 
             /**
              * Player jumping logic (diagonal+straight up)
@@ -141,11 +166,19 @@ public class GameLoop implements Runnable{
                 if (player.getVelocity()!=5){
                     player.setVelocity((int)(30*panel.getResolutionMultiplier()));
                 }
+//concept            if (player.getLevel().checkIcedPlatform(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())) {
+//                    player.setVelocity((int)(45*panel.getResolutionMultiplier()));
+//                    System.out.println("ice");
+//                }
             }
             else if (player.isWalkingL()&&!panel.getPlayer().isJumping() && !player.isFalling()) {
                 if (player.getVelocity()!=-5){
                     player.setVelocity((int)(-30*panel.getResolutionMultiplier()));
                 }
+//concept           if (player.getLevel().checkIcedPlatform(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())) {
+//                    player.setVelocity((int)(-45*panel.getResolutionMultiplier()));
+//                    System.out.println("ice");
+//                }
             }
 
             if (player.getVelocity()!=0 && !panel.getPlayer().isJumping()){
@@ -161,13 +194,17 @@ public class GameLoop implements Runnable{
                 }
 
                 if (!player.isWalkingR() && player.getVelocity()>0 && !player.isJumping()){
-                    player.setVelocity(player.getVelocity() -1);
+                    if (player.getLevel().checkIcedPlatform(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())){
+                        player.setVelocity(player.getVelocity()-0.25);
+                    }else player.setVelocity(player.getVelocity() -1);
                     if (player.getVelocity()==0){
                         player.setStatus(0);
                     }
                 }
                 else if (!player.isWalkingL() && player.getVelocity()<0 && player.getJumpForce()==0 && player.getJumpForceL()==0 && player.getJumpForceR()==0){
-                    player.setVelocity(player.getVelocity() +1);
+                    if (player.getLevel().checkIcedPlatform(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())){
+                        player.setVelocity(player.getVelocity()+0.25);
+                    }else player.setVelocity(player.getVelocity() +1);
                     if (player.getVelocity()==0){
                         player.setStatus(1);
                     }
@@ -222,12 +259,12 @@ public class GameLoop implements Runnable{
             if (player.getLevel().checkSlopedCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[0]){
                 int sliding = (int)player.getFallingSpeed();
                 player.setX(player.getX() - sliding*2);
-                System.out.println("sliding left");
+//                System.out.println("sliding left");
             }
             if (player.getLevel().checkSlopedCollision(panel.isLevelChanged(), player.getCurrLevel(), player.getX(), player.getY())[1]){
                 int sliding = (int)player.getFallingSpeed();
                 player.setX(player.getX() + sliding*2);
-                System.out.println("sliding right");
+//                System.out.println("sliding right");
             }
 
 
