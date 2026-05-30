@@ -12,8 +12,8 @@ import java.io.InputStream;
 public class Levels {
 
     private int currLevel;
-    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png","levels/level22.png","levels/level31.png"};
-    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png","levels/collisionMaps/clevel22.png","levels/collisionMaps/clevel31.png"};
+    private final String[] levelMap = {"levels/level11.png","levels/level12.png","levels/level21.png","levels/level22.png","levels/level31.png","levels/level32.png"};
+    private final String[] collisionMap = {"levels/collisionMaps/clevel11.png","levels/collisionMaps/clevel12.png","levels/collisionMaps/clevel21.png","levels/collisionMaps/clevel22.png","levels/collisionMaps/clevel31.png","levels/collisionMaps/clevel32.png"};
 
     private final int[] collisionColors = {new Color(255,0,0).getRGB(), new Color(69,50,40).getRGB()};
     private final int[] slopedCollisionColors = {new Color(0,255,255).getRGB(), new Color(255,0,255).getRGB()};
@@ -38,6 +38,27 @@ public class Levels {
             System.out.println("missing file");
         }
 
+    }
+
+    public boolean checkIcedPlatform(boolean levelChanged, int playerLevel, int x, int y){
+        x = (int)(x+20*resolutionMultiplier);
+        y = (int)(y+50*resolutionMultiplier+2);
+
+        if (levelChanged) {
+            try{
+                imageIcon =  new ImageIcon(this.getClass().getClassLoader().getResource(collisionMap[playerLevel]));
+                imageIcon.setImage(imageIcon.getImage().getScaledInstance(this.dimension.width,this.dimension.height,Image.SCALE_SMOOTH));
+
+                bufferedImage = new BufferedImage(dimension.width,dimension.height,BufferedImage.TYPE_INT_ARGB);
+                bufferedImage.createGraphics().drawImage(imageIcon.getImage(),0,0,dimension.width,dimension.height,null);
+            }catch (NullPointerException e){
+                System.out.println("missing file");
+            }
+        }
+        if (bufferedImage.getRGB(x,y) == new Color(0,255,0).getRGB()){
+            return true;
+        }
+        else return false;
     }
 
     public boolean[] checkSlopedCollision(boolean levelChanged, int playerLevel, int x, int y){
